@@ -964,7 +964,7 @@ app.post('/api/strackerserver', function (req, res) {
 		if(isRunningOnWindows){
 			var sTracker = childProcess.spawn('stracker.exe', ['--stracker_ini', 'stracker.ini'], { cwd: sTrackerPath });
 		} else {
-			 var sTracker = childProcess.spawn('./stracker_linux_x86/stracker', ['--stracker_ini', 'stracker.ini'], { cwd: sTrackerPath });^M
+			 var sTracker = childProcess.spawn('./stracker_linux_x86/stracker', ['--stracker_ini', 'stracker.ini'], { cwd: sTrackerPath });
 		}
 		sTrackerServerPid = sTracker.pid;
 		if (sTrackerServerStatus == 0) {
