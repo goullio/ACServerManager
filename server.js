@@ -961,9 +961,12 @@ app.get('/api/strackerserver/status', function (req, res) {
 // post start stracker server
 app.post('/api/strackerserver', function (req, res) {
 	try {
-		var sTracker = childProcess.spawn('stracker.exe', ['--stracker_ini', 'stracker.ini'], { cwd: sTrackerPath });
+		if(isRunningOnWindows){
+			var sTracker = childProcess.spawn('stracker.exe', ['--stracker_ini', 'stracker.ini'], { cwd: sTrackerPath });
+		} else {
+			 var sTracker = childProcess.spawn('./stracker_linux_x86/stracker', ['--stracker_ini', 'stracker.ini'], { cwd: sTrackerPath });^M
+		}
 		sTrackerServerPid = sTracker.pid;
-		
 		if (sTrackerServerStatus == 0) {
 			sTrackerServerStatus = -1;
 		}
@@ -995,7 +998,11 @@ app.post('/api/strackerserver', function (req, res) {
 app.post('/api/strackerserver/stop', function (req, res) {
 	try {
 		if (sTrackerServerPid) {
-			childProcess.spawn("taskkill", ["/pid", sTrackerServerPid, '/f', '/t']);
+			if (isRunningOnWindows){
+				childProcess.spawn("taskkill", ["/pid", sTrackerServerPid, '/f', '/t']);
+			} else {
+				childProcess.spawn("kill", [sTrackerServerPid]);
+			}
 			sTrackerServerPid = undefined;
 		}
 
